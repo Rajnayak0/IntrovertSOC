@@ -1,0 +1,12 @@
+value,type,verdict,note
+10.0.0.5,ip,malicious,Known SSH brute-force source (demo feed)
+185.220.101.1,ip,malicious,Tor exit node (sample)
+45.61.136.202,ip,malicious,C2 infrastructure (sample)
+203.0.113.66,ip,suspicious,Scanner (sample)
+1.1.1.1,ip,clean,Public resolver
+8.8.8.8,ip,clean,Public resolver
+evil-payload.example,domain,malicious,Phishing kit host (sample)
+malware-drop.example,domain,malicious,Malware distribution (sample)
+update-check.example,domain,suspicious,Suspected drive-by (sample)
+d41d8cd98f00b204e9800998ecf8427e,md5,clean,Empty file hash (sample)
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,sha256,clean,Empty file hash (sample)

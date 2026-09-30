@@ -1,0 +1,4 @@
+name: extract_knowledge
+description: Extract reusable knowledge from the case into the knowledge base - MIGRATION #8
+steps:
+  - type: extract_knowledge

@@ -1,0 +1,10 @@
+name: case_summary
+description: One-paragraph case summary from the local model (mode-aware) - MIGRATION #6
+steps:
+  - type: llm
+    prompt: |
+      Summarize this case in one paragraph: key facts, likely impact, and the single
+      next action an analyst should take.
+
+      Case context:
+      {{case}}

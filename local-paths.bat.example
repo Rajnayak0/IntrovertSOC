@@ -1,0 +1,7 @@
+rem =====================================================================
+rem IntrovertSOC - Local Paths Override Example
+rem If start.bat does not auto-detect your llamafile or model,
+rem rename this file to "local-paths.bat" and set your exact file paths below:
+rem =====================================================================
+rem set "LLAMAFILE_EXE=C:\path\to\llamafile.exe"
+rem set "GGUF_MODEL=C:\path\to\IntrovertSOC\models\Qwen3-4B-Q4_K_M.gguf"

@@ -1,0 +1,6 @@
+name: triage_and_learn
+description: Enrich IOCs, run the AI investigation, then harvest knowledge - end-to-end demo
+steps:
+  - type: enrich
+  - type: investigate
+  - type: extract_knowledge

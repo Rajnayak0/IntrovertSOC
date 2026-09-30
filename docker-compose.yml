@@ -1,0 +1,37 @@
+# IntrovertSOC - offline deployment: backend (Django) + frontend (nginx SPA).
+# llamafile runs SEPARATELY on the host (start it with scripts/start_llamafile.*);
+# the backend reaches it at http://host.docker.internal:8080 (see LLAMAFILE_BASE_URL).
+#
+#   docker compose up --build -d
+#   docker compose exec backend python manage.py createsuperuser
+#   open http://localhost:8081
+#
+# Build-time network use only (pypi.org, registry.npmjs.org, base images).
+# At runtime the stack contacts nothing but the host llamafile - see NETWORK.md.
+
+services:
+  backend:
+    build: ./backend
+    environment:
+      DJANGO_DEBUG: "false"
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-compose-local-secret-change-me}
+      DJANGO_ALLOWED_HOSTS: backend,localhost,127.0.0.1
+      DJANGO_CSRF_TRUSTED_ORIGINS: http://localhost:8081,http://127.0.0.1:8081
+      DJANGO_DB_PATH: /data/db.sqlite3
+      LLAMAFILE_BASE_URL: http://host.docker.internal:8080
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - backend_data:/data
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  backend_data:

@@ -1,0 +1,4 @@
+name: investigate
+description: Full AI investigation of the case (LangGraph flow, mode-aware report)
+steps:
+  - type: investigate
