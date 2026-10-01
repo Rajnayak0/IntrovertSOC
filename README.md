@@ -37,14 +37,15 @@ cd IntrovertSOC
 ## 📑 Table of Contents
 1. [🎯 Aim & Motive](#-aim--motive)
 2. [🏗️ Architecture & Data Flow](#️-architecture--data-flow)
-3. [📁 Folder Structure (Where Files Go)](#-folder-structure-where-files-go)
-4. [✨ Key Features & Chat Modes](#-key-features--chat-modes)
-5. [🧠 Best Models & Hardware Requirements](#-best-models--hardware-requirements)
-6. [📋 Prerequisites](#-prerequisites)
-7. [🖱️ One-Click Batch Files (.bat)](#️-one-click-batch-files-bat)
-8. [🚀 Step-by-Step Daily Usage](#-step-by-step-daily-usage)
-9. [🔧 Troubleshooting & Common Issues](#-troubleshooting--common-issues)
-10. [📜 Attribution & License](#-attribution--license)
+3. [📸 Interface Preview & Screenshots](#-interface-preview--screenshots)
+4. [📁 Folder Structure (Where Files Go)](#-folder-structure-where-files-go)
+5. [✨ Key Features & Chat Modes](#-key-features--chat-modes)
+6. [🧠 Best Models & Hardware Requirements](#-best-models--hardware-requirements)
+7. [📋 Prerequisites](#-prerequisites)
+8. [🖱️ One-Click Batch Files (.bat)](#️-one-click-batch-files-bat)
+9. [🚀 Step-by-Step Daily Usage](#-step-by-step-daily-usage)
+10. [🔧 Troubleshooting & Common Issues](#-troubleshooting--common-issues)
+11. [📜 Attribution & License](#-attribution--license)
 
 ---
 
@@ -92,6 +93,28 @@ flowchart LR
     style Weights fill:#21262d,stroke:#f59e0b,color:#fbbf24
     style Cloud fill:#1f1f1f,stroke:#ef4444,stroke-dasharray: 5 5,color:#ef4444
 ```
+
+---
+
+## 📸 Interface Preview & Screenshots
+
+Explore IntrovertSOC running locally in full dark mode:
+
+### 1. Unified SOC Analyst Dashboard
+![Unified SOC Analyst Dashboard](docs/screenshots/dashboard.png)
+> **Real-time triage overview:** Monitor 24-hour alert volume, track unassigned incidents, manage open cases, and verify local LLM engine status at a glance.
+
+### 2. Automated AI Case Assessment & MITRE Correlation
+![Automated AI Case Assessment](docs/screenshots/case_investigation.png)
+> **Deep threat analysis:** Correlates multiple alerts into unified cases with automated verdicts, confidence metrics, attack pattern summaries, and actionable remediation steps.
+
+### 3. "Ask The Agent" Interactive Investigation
+![Ask The Agent Interactive Investigation](docs/screenshots/ask_the_agent.png)
+> **Context-aware tactical chat:** Query the local LLM about specific case details and receive direct, concise verdicts in your active persona mode.
+
+### 4. 100% Strict Air-Gapped Privacy Guarantee
+![100% Strict Air-Gapped Privacy Guarantee](docs/screenshots/privacy_guarantee.png)
+> **Zero telemetry policy:** Strictly zero cloud AI, zero tracking, and zero outbound network traffic — operations are confined to your local model and designated feeds.
 
 ---
 
