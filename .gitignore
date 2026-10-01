@@ -5,6 +5,7 @@ models/*.bin
 
 # Local machine configuration
 local-paths.bat
+upload_to_github.bat
 
 # Environment & secrets
 .env

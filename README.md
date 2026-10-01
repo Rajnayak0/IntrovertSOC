@@ -1,140 +1,188 @@
 # 🛡️ IntrovertSOC
 
-> **The 100% Offline, Privacy-First, Air-Gapped AI Security Operations Center (SOC)**  
-> Alert triage, case management, AI incident investigation, threat enrichment, and automated playbooks — powered entirely by a local LLM engine. **Zero cloud API keys. Zero external telemetry. Zero subscription costs.**
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Rajnayak0/IntrovertSOC/main/frontend/public/favicon.svg" width="96" height="96" alt="IntrovertSOC Logo" />
+</p>
+
+<p align="center">
+  <strong>The 100% Offline, Privacy-First, Air-Gapped AI Security Operations Center (SOC)</strong><br />
+  <em>Alert triage, case investigation, incident response, knowledge extraction, and automated playbooks — powered entirely by a local LLM.</em>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Air--Gapped-100%25%20Offline-success?style=for-the-badge&logo=shield" alt="Air-Gapped" />
+  <img src="https://img.shields.io/badge/Cloud%20APIs-Zero%20(No%20Keys)-red?style=for-the-badge" alt="Zero Cloud APIs" />
+  <img src="https://img.shields.io/badge/Backend-Django%20%2B%20SQLite%20%2B%20uv-blue?style=for-the-badge&logo=python" alt="Python" />
+  <img src="https://img.shields.io/badge/Frontend-React%2019%20%2B%20Tailwind%204-cyan?style=for-the-badge&logo=react" alt="React 19" />
+  <img src="https://img.shields.io/badge/Engine-llamafile%20%2F%20GGUF-orange?style=for-the-badge" alt="llamafile" />
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License: MIT" />
+</p>
+
+---
+
+## ⚡ 30-Second Quickstart
+
+```powershell
+# 1. Clone the repository
+git clone https://github.com/Rajnayak0/IntrovertSOC.git
+cd IntrovertSOC
+
+# 2. Download llamafile.exe & your GGUF model into the models/ folder
+# 3. Double-click setup.bat   (Installs dependencies & creates admin)
+# 4. Double-click start.bat   (Launches everything & opens http://127.0.0.1:5173)
+```
 
 ---
 
 ## 📑 Table of Contents
 1. [🎯 Aim & Motive](#-aim--motive)
-2. [✨ Key Features & Chat Modes](#-key-features--chat-modes)
-3. [🧠 Best Models & Hardware Requirements](#-best-models--hardware-requirements)
-4. [📋 Prerequisites](#-prerequisites)
-5. [📦 Step-by-Step Installation](#-step-by-step-installation)
-6. [🖱️ One-Click Batch Files (.bat) — Copy & Paste Scripts](#️-one-click-batch-files-bat--copy--paste-scripts)
-   - [1. `setup.bat` (One-Time Setup)](#1-setupbat-one-time-setup)
-   - [2. `start.bat` (One-Click Launch)](#2-startbat-one-click-launch)
-   - [3. `stop.bat` (One-Click Shutdown)](#3-stopbat-one-click-shutdown)
-   - [4. `local-paths.bat` (Optional Path Override)](#4-local-pathsbat-optional-path-override)
-7. [🚀 How to Use IntrovertSOC](#-how-to-use-introvertsoc)
-8. [🔧 Troubleshooting & Common Issues](#-troubleshooting--common-issues)
-9. [📜 Attribution & License](#-attribution--license)
+2. [🏗️ Architecture & Data Flow](#️-architecture--data-flow)
+3. [📁 Folder Structure (Where Files Go)](#-folder-structure-where-files-go)
+4. [✨ Key Features & Chat Modes](#-key-features--chat-modes)
+5. [🧠 Best Models & Hardware Requirements](#-best-models--hardware-requirements)
+6. [📋 Prerequisites](#-prerequisites)
+7. [🖱️ One-Click Batch Files (.bat)](#️-one-click-batch-files-bat)
+8. [🚀 Step-by-Step Daily Usage](#-step-by-step-daily-usage)
+9. [🔧 Troubleshooting & Common Issues](#-troubleshooting--common-issues)
+10. [📜 Attribution & License](#-attribution--license)
 
 ---
 
 ## 🎯 Aim & Motive
 
-### The Problem
-Traditional Cloud AI SOC tools (and extensions relying on external APIs like OpenAI, Anthropic, or cloud providers) require sending your organization's sensitive security telemetry — **internal IP addresses, raw syslog dumps, firewall alerts, credentials, and vulnerability signatures** — across the public internet to third-party servers.
+### 🛑 The Problem with Cloud AI in Cybersecurity
+Mainstream AI security tools send raw security logs, active intrusion alerts, firewall telemetry, user credentials, and internal network maps to commercial third-party cloud LLMs (OpenAI, Anthropic, Google, etc.).
 
-For cybersecurity teams, defense contractors, financial institutions, and privacy-conscious enterprises, this creates severe compliance violations (**GDPR, HIPAA, SOC 2, ISO 27001**) and poses significant data-leak risks.
+For security operations centers, defense contractors, financial institutions, and privacy-conscious organizations, this creates immediate regulatory violations (**GDPR, HIPAA, SOC 2, ISO 27001, Defense/Gov standards**) and risks catastrophic corporate espionage through third-party data breaches.
 
-### The Solution: IntrovertSOC
-**IntrovertSOC** reimagines the modern agentic SOC platform as a **strictly self-contained, air-gapped system**:
-- **100% Local Intelligence:** All alert summaries, case assessments, playbook logic, and threat triage are executed on your machine via a local `llamafile` / llama.cpp inference server.
-- **No Cloud Dependencies:** No OpenAI API keys, no monthly token bills, and no third-party telemetry. It talks exclusively to `127.0.0.1`.
-- **Lightweight Architecture:** Stripped of heavy distributed infrastructure (no Postgres, Redis, Kafka, or LDAP required). Runs efficiently on top of **SQLite** and Python background worker threads.
-- **Fast Modern UI:** Built with **React 19** and **Tailwind CSS 4** featuring an analyst-first dark mode.
+### 🛡️ The Solution: IntrovertSOC
+**IntrovertSOC** is an air-gapped, sovereign AI Security Operations Center engineered from the ground up to keep **all security intelligence strictly within your perimeter**:
+- **Zero Cloud Egress:** Operates exclusively over `127.0.0.1`. The application makes **zero outbound requests** to cloud LLM providers, collects no telemetry, and requires no API keys.
+- **Lightweight & Self-Contained:** Stripped of complex distributed infrastructure. No PostgreSQL, Redis, Kafka, or LDAP clusters are required. Runs efficiently on **SQLite** and background worker threads.
+- **Local GGUF Acceleration:** Powered by Mozilla's high-performance `llamafile` / llama.cpp runtime, utilizing your GPU (NVIDIA CUDA, AMD ROCm, Apple Metal) or CPU without friction.
+- **Modern Dark-Mode UI:** High-density, tactical user interface built with **React 19** and **Tailwind CSS 4**.
+
+---
+
+## 🏗️ Architecture & Data Flow
+
+All communication remains strictly on the local machine (`localhost / 127.0.0.1`):
+
+```mermaid
+flowchart LR
+    subgraph Host ["Your Local Machine (100% Offline / Air-Gapped)"]
+        direction TB
+        Browser["🖥️ Browser UI<br/>(React 19 + Tailwind 4)<br/><b>http://127.0.0.1:5173</b>"]
+        Backend["⚙️ Django Backend<br/>(Alerts, Cases, Playbooks, SQLite)<br/><b>http://127.0.0.1:8000</b>"]
+        LLM["🧠 Local LLM Engine<br/>(llamafile / llama.cpp Server)<br/><b>http://127.0.0.1:8080</b>"]
+        Weights[("📦 GGUF Model<br/>(models/*.gguf)")]
+
+        Browser <-->|REST API / JSON| Backend
+        Backend <-->|HTTP / OpenAI Spec| LLM
+        LLM --- Weights
+    end
+
+    Cloud[("☁️ Public Cloud<br/>(OpenAI, Telemetry)")]
+    Backend -.-x|BLOCKED / NO EGRESS| Cloud
+
+    style Host fill:#0d1117,stroke:#30363d,stroke-width:2px,color:#c9d1d9
+    style Browser fill:#161b22,stroke:#10b981,color:#10b981
+    style Backend fill:#161b22,stroke:#8b5cf6,color:#a78bfa
+    style LLM fill:#161b22,stroke:#3b82f6,color:#60a5fa
+    style Weights fill:#21262d,stroke:#f59e0b,color:#fbbf24
+    style Cloud fill:#1f1f1f,stroke:#ef4444,stroke-dasharray: 5 5,color:#ef4444
+```
+
+---
+
+## 📁 Folder Structure (Where Files Go)
+
+When setting up IntrovertSOC, place your model and engine files as shown below:
+
+```text
+IntrovertSOC/
+│
+├── models/
+│   ├── llamafile.exe               <-- Place downloaded llamafile binary here
+│   └── Qwen3-4B-Q4_K_M.gguf        <-- Place your .gguf model weights here
+│
+├── backend/                        <-- Python 3.13 Django API, SQLite DB & playbooks
+├── frontend/                       <-- React 19 + Vite + Tailwind CSS dashboard
+├── docs/                           <-- In-depth model benchmarks and network docs
+│
+├── setup.bat                       <-- 1. Double click once to initialize environment
+├── start.bat                       <-- 2. Double click to start all 3 servers
+├── stop.bat                        <-- 3. Double click to cleanly stop all servers
+└── local-paths.bat.example         <-- Optional: Rename if model is on another drive
+```
 
 ---
 
 ## ✨ Key Features & Chat Modes
 
-IntrovertSOC features three unique **LLM Persona Modes** that you can toggle directly from the top navigation bar at any time:
+IntrovertSOC features three switchable **LLM Persona Modes** right from the top navigation bar. Every triage report, IOC analysis, and chat interaction adapts instantly:
 
 | Mode | Personality | Best For |
 |---|---|---|
-| 💼 **Work Mode** | Comprehensive, structured markdown reports with executive summaries, risk levels, and MITRE ATT&CK mapping. | Formal incident response documentation and management reporting. |
-| 🤫 **Introvert Mode** | Direct, factual, stripped of conversational pleasantries and filler text. | Fast day-to-day tier-1/tier-2 alert triage. |
-| ⚡ **Super Introvert** | Maximum brevity — clipped 1 to 2-line tactical answers. | Rapid fire command-line style triage when every second counts. |
+| 💼 **Work Mode** | Comprehensive, structured markdown reports with executive summaries, risk scores, IOC lists, and MITRE ATT&CK mappings. | Formal incident documentation, audit trails, and reporting to leadership. |
+| 🤫 **Introvert Mode** | Direct, factual, stripped of conversational filler, pleasantries, and chatter. | Everyday tier-1/tier-2 alert triage when speed is key. |
+| ⚡ **Super Introvert** | Maximum brevity — clipped 1 to 2-line direct answers. | Rapid-fire command-line style triage during active incident response. |
 
 ---
 
 ## 🧠 Best Models & Hardware Requirements
 
-IntrovertSOC uses **GGUF** quantized models executed through **llamafile** (or any OpenAI-compatible local server on port 8080).
+IntrovertSOC runs any GGUF-quantized model via `llamafile` (or any OpenAI-compatible server on port 8080).
 
 ### What is Quantization (`Q4_K_M`)?
-Quantization compresses large model weights from 16-bit floating point down to 4-bit integers.  
-👉 **`Q4_K_M` is the recommended sweet spot**: it reduces model size by ~70% while retaining over 98% of full analytical precision.
+Quantization reduces large model weights from 16-bit precision to 4-bit integers.  
+👉 **`Q4_K_M` is the recommended standard**: it shrinks RAM/disk consumption by ~70% while preserving over 98% of full analytical reasoning.
 
 ### Hardware Tier & Recommended Model Matrix
 
-| Hardware Tier | Available System RAM / VRAM | Recommended Model | Model Size | Why Choose This? |
+| Hardware Tier | Available RAM / VRAM | Recommended Model | File Size | Strengths |
 |---|---|---|---|---|
-| **Entry-Level (Standard Laptop)** | **4 GB – 8 GB RAM** | **Qwen3-4B-Instruct (`Q4_K_M`)** ⭐ *(Default)* | **~2.49 GB** | Runs on virtually any computer. Fast response times, low RAM usage, and solid triage capabilities. |
-| **Budget / Ultra-Light** | 2 GB – 4 GB RAM | **Qwen3-1.7B-Instruct (`Q4_K_M`)** | ~1.2 GB | For resource-constrained mini-PCs or older systems. |
-| **Mid-Range (Standard Workstation)** | **16 GB RAM** (or 8GB GPU) | **Qwen3-8B-Instruct (`Q4_K_M`)** | ~4.7 GB | Noticeably sharper case assessments, reliable JSON structured outputs, and deeper threat correlation. |
+| **Entry-Level (Standard Laptop)** | **4 GB – 8 GB RAM** | **Qwen3-4B-Instruct (`Q4_K_M`)** ⭐ *(Default)* | **~2.49 GB** | Default tested model. Runs on almost any machine, near-zero latency, reliable alert extraction. |
+| **Budget / Ultra-Light** | 2 GB – 4 GB RAM | **Qwen3-1.7B-Instruct (`Q4_K_M`)** | ~1.2 GB | Runs on low-spec systems or mini-PCs. |
+| **Mid-Range (Standard Workstation)** | **16 GB RAM** (or 8GB GPU) | **Qwen3-8B-Instruct (`Q4_K_M`)** | ~4.7 GB | Noticeably sharper case assessments, reliable JSON structured outputs. |
 | **Heavy Analyst Rig** | 16 GB – 24 GB RAM | **Qwen3-14B-Instruct (`Q4_K_M`)** | ~9.0 GB | Superior playbook decision making and multi-step investigation logic. |
-| **High-End Workstation** | 24 GB – 32 GB RAM | **Qwen3-32B-Instruct (`Q4_K_M`)** | ~20 GB | Enterprise-grade reasoning without any cloud connection. |
+| **High-End Workstation** | 24 GB – 32 GB RAM | **Qwen3-32B-Instruct (`Q4_K_M`)** | ~20 GB | Enterprise-grade reasoning without any external connection. |
 | **Enterprise Server** | 48 GB – 64 GB+ RAM | **Qwen3-72B-Instruct (`Q4_K_M`)** | ~43 GB | Flagship-class deep cyber threat intelligence extraction. |
 
-### Where to Download the Model & llamafile
-1. **Download `llamafile` executable:**
-   - Grab the latest Windows release (`llamafile-x.x.x.exe`) from Mozilla's official GitHub:  
-     👉 [llamafile Releases](https://github.com/Mozilla-Ocho/llamafile/releases)
-   - Rename it to `llamafile.exe` and place it inside the `models/` folder (or project root).
-2. **Download your GGUF Model:**
-   - For the recommended starter model (**Qwen3-4B**):  
-     👉 [Download Qwen3-4B-Q4_K_M.gguf from Hugging Face](https://huggingface.co/Qwen/Qwen3-4B-GGUF)
-   - Save the `.gguf` file directly inside the `models/` directory.
+### Download Links
+1. **Download `llamafile` binary:**  
+   👉 [Mozilla llamafile Releases (GitHub)](https://github.com/Mozilla-Ocho/llamafile/releases)  
+   *(Download `llamafile-x.x.x.exe`, rename to `llamafile.exe`, and place in `models/`)*
+2. **Download Model File:**  
+   👉 [Download Qwen3-4B-Q4_K_M.gguf from Hugging Face](https://huggingface.co/Qwen/Qwen3-4B-GGUF)  
+   *(Place the `.gguf` file inside `models/`)*
 
 ---
 
 ## 📋 Prerequisites
 
-Before running the application, make sure you have the following installed on Windows:
+Before running the application on Windows, ensure the following prerequisites are installed:
 
 1. **Python Package Manager (`uv`)**  
-   Open PowerShell or Command Prompt and run:
+   Open PowerShell and run:
    ```powershell
    winget install astral-sh.uv
    ```
-2. **Node.js (LTS version 20 or newer)**  
+2. **Node.js (LTS 20+)**  
    ```powershell
    winget install OpenJS.NodeJS.LTS
    ```
-3. *(Optional)* **Git for Windows** (already installed if you cloned this repository):
-   ```powershell
-   winget install Git.MinGit
-   ```
 
 ---
 
-## 📦 Step-by-Step Installation
+## 🖱️ One-Click Batch Files (.bat)
 
-1. **Clone or Download the Repository:**
-   ```powershell
-   git clone https://github.com/Rajnayak0/IntrovertSOC.git
-   cd IntrovertSOC
-   ```
-2. **Place your Model and Engine:**
-   - Place `llamafile.exe` inside the `models/` folder.
-   - Place your chosen `.gguf` model file (e.g., `Qwen3-4B-Q4_K_M.gguf`) inside the `models/` folder.
-3. **Run Setup:**
-   - Double-click `setup.bat` (or execute it from terminal).
-   - Enter your desired **Admin Username** and **Password** when prompted.
-4. **Start IntrovertSOC:**
-   - Double-click `start.bat`.
-   - Your browser will open automatically at `http://127.0.0.1:5173`.
+IntrovertSOC comes with pre-configured batch scripts in the project root. **You do not need to create these manually** — they are already included in your clone!
 
----
-
-## 🖱️ One-Click Batch Files (.bat) — Copy & Paste Scripts
-
-For Windows users, IntrovertSOC includes three pre-configured batch files in the root folder so you never have to type long terminal commands manually.
-
-> **💡 How to create or edit a `.bat` file in Windows:**  
-> 1. Open **Notepad** (press `Win + R`, type `notepad`, and press Enter).  
-> 2. Copy the code block below and paste it into Notepad.  
-> 3. Click **File → Save As...**  
-> 4. In **Save as type**, choose **All Files (*.*)**.  
-> 5. Enter the exact filename (e.g. `setup.bat`) and click **Save** in the `IntrovertSOC` project root folder.
-
----
-
-### 1. `setup.bat` (One-Time Setup)
-This script verifies your prerequisites (`uv` and `node`), synchronizes Python backend dependencies, creates database tables, lets you create an admin account, and installs frontend dependencies.
+### 1. `setup.bat` (Run Once)
+Checks prerequisites, installs backend Python dependencies via `uv`, creates database tables, lets you create an admin account, and installs frontend packages.
+<details>
+<summary><b>Click to expand and view <code>setup.bat</code> source code</b></summary>
 
 ```bat
 @echo off
@@ -208,11 +256,14 @@ echo SETUP FAILED - read the error message above, fix it, run setup.bat again.
 pause
 exit /b 1
 ```
+</details>
 
 ---
 
-### 2. `start.bat` (One-Click Launch)
-This script auto-detects `llamafile.exe` and any `.gguf` file in `models\`, starts the backend (:8000), frontend (:5173), and local LLM (:8080) in three separate windows, and opens your browser.
+### 2. `start.bat` (Daily Launcher)
+Auto-detects `llamafile.exe` and your `.gguf` file in `models\`, starts backend (`:8000`), frontend (`:5173`), and local LLM (`:8080`) in three terminal windows, and automatically opens your browser.
+<details>
+<summary><b>Click to expand and view <code>start.bat</code> source code</b></summary>
 
 ```bat
 @echo off
@@ -341,11 +392,14 @@ echo [MISSING] Node.js - run setup.bat first.
 pause
 exit /b 1
 ```
+</details>
 
 ---
 
-### 3. `stop.bat` (One-Click Shutdown)
-Gracefully terminates processes bound to ports 8000 (backend), 5173 (frontend), and 8080 (llamafile), as well as any orphaned background worker processes.
+### 3. `stop.bat` (Clean Shutdown)
+Safely kills processes running on ports 8000, 5173, and 8080, and cleans up any orphan worker processes.
+<details>
+<summary><b>Click to expand and view <code>stop.bat</code> source code</b></summary>
 
 ```bat
 @echo off
@@ -361,42 +415,34 @@ for %%P in (8000 5173 8080) do (
     )
 )
 
-rem --- Orphaned dev processes (Django reloaders / extra vite or uv) ---
 powershell -NoProfile -Command "Get-CimInstance Win32_Process | Where-Object { ($_.CommandLine -match 'manage\.py runserver' -and $_.CommandLine -match 'IntrovertSOC') -or ($_.CommandLine -match 'vite\.js' -and $_.CommandLine -match 'IntrovertSOC') -or ($_.Name -eq 'uv.exe' -and $_.CommandLine -match 'manage\.py runserver') } | ForEach-Object { Write-Host ('  killing orphan ' + $_.ProcessId + ' [' + $_.Name + ']'); Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }"
 
 echo Done.
 pause
 ```
+</details>
 
 ---
 
 ### 4. `local-paths.bat` (Optional Path Override)
-If your model or llamafile executable is stored on a different drive (e.g. `D:\LLMs\...`), create a file named `local-paths.bat` in the root folder with:
-
+If your model or llamafile is stored outside the repository (e.g. `C:\AI_Models\...`), create `local-paths.bat` in the root folder with:
 ```bat
-set "LLAMAFILE_EXE=D:\engineering\OFF_LLM\llamafile.exe"
-set "GGUF_MODEL=D:\engineering\OFF_LLM\models\Qwen3-4B-Q4_K_M.gguf"
+set "LLAMAFILE_EXE=C:\AI_Models\llamafile.exe"
+set "GGUF_MODEL=C:\AI_Models\models\Qwen3-4B-Q4_K_M.gguf"
 ```
-*(This file is automatically added to `.gitignore` so your personal directory paths are never pushed to GitHub).*
+*(This file is automatically ignored by `.gitignore` so your private machine paths are never pushed to GitHub).*
 
 ---
 
-## 🚀 How to Use IntrovertSOC
+## 🚀 Step-by-Step Daily Usage
 
-1. **Start the Stack:**
-   - Double-click `start.bat`. Three terminal windows will appear (Django Backend, Vite Frontend, and llamafile Server).
-2. **Access the Web Console:**
-   - Open your browser to `http://127.0.0.1:5173`.
-   - Log in using the credentials created during `setup.bat`.
-3. **Verify LLM Connection:**
-   - Look at the top-right corner of the interface. The status indicator should turn **Green (Connected)**.
-4. **Triage Alerts & Run Investigations:**
-   - Navigate to **Alerts** or **Cases**.
-   - Click on any incident to run automated AI triage, generate IOC extraction, and trigger playbooks.
-5. **Switch Personas On the Fly:**
-   - Use the top bar switch to toggle between **Work**, **Introvert**, and **Super Introvert** styles depending on your workload.
-6. **Shutting Down:**
-   - When finished, double-click `stop.bat` to release all ports and safely shut down all servers.
+1. **Launch:** Double-click `start.bat`. Three terminal windows will appear (Django Backend, Vite Frontend, and llamafile Server).
+2. **Access Web App:** Open `http://127.0.0.1:5173` in your browser.
+3. **Log In:** Use the superuser account credentials created during `setup.bat`.
+4. **Status Check:** Check the connection badge in the top right. It should display **Green (Connected)**.
+5. **Investigate:** Ingest alerts, manage security cases, and trigger automated playbook investigations.
+6. **Switch Persona:** Toggle between **Work**, **Introvert**, and **Super Introvert** at any time from the top bar.
+7. **Shut Down:** When finished, double-click `stop.bat` to gracefully release all ports and shutdown background processes.
 
 ---
 
@@ -404,13 +450,13 @@ set "GGUF_MODEL=D:\engineering\OFF_LLM\models\Qwen3-4B-Q4_K_M.gguf"
 
 | Issue | Cause | Solution |
 |---|---|---|
-| **Port already in use error** | An existing background server is still occupying port 8000, 5173, or 8080. | Double-click `stop.bat` to terminate lingering processes, then run `start.bat` again. |
-| **CSRF verification failed** | Multiple instances of Django are running simultaneously on port 8000. | Run `stop.bat`, close all open browser tabs for `127.0.0.1`, and re-launch `start.bat`. |
-| **Status dot is Grey / Disconnected** | `llamafile` server is not running or model failed to load into RAM. | Check window 3 (LLM terminal) for error messages. Ensure your model fits in your available RAM. |
-| **Empty or reasoning leakage in responses** | Model template outputting reasoning tokens into content. | IntrovertSOC's `local_engine.py` automatically handles reasoning filtering. Make sure you are using an Instruct GGUF model. |
+| **Port already in use error** | An existing background server is occupying port 8000, 5173, or 8080. | Run `stop.bat` to terminate lingering processes, then run `start.bat` again. |
+| **CSRF verification failed** | Two backend processes are running simultaneously. | Run `stop.bat`, close browser tabs for `127.0.0.1`, and re-launch `start.bat`. |
+| **Status dot is Grey / Disconnected** | `llamafile` failed to load model into RAM or port 8080 is blocked. | Inspect Window 3 (LLM terminal) for error output. Ensure the model fits your available RAM. |
+| **Model outputting reasoning tags** | Model template leaking `<think>` tokens into content. | IntrovertSOC's `local_engine.py` automatically cleans reasoning tokens. Ensure you are using an Instruct GGUF model. |
 
 ---
 
 ## 📜 Attribution & License
 
-IntrovertSOC is derived from [FunnyWolf/agentic-soc-platform](https://github.com/FunnyWolf/agentic-soc-platform) and licensed under the **MIT License**. See [LICENSE](LICENSE) for full legal text.
+IntrovertSOC is derived from [FunnyWolf/agentic-soc-platform](https://github.com/FunnyWolf/agentic-soc-platform) and licensed under the **MIT License**. See [LICENSE](LICENSE) for full details.
